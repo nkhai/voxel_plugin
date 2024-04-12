@@ -100,7 +100,7 @@ simply [install it as a plugin](https://docs.voxel51.com/plugins/index.html):
 
 ```shell
 fiftyone plugins download https://github.com/voxel51/voxelgpt
-fiftyone plugins requirements @voxel51/voxelgpt --install
+fiftyone plugins requirements atlas_plugin --install
 ```
 
 ### Local use/development

@@ -20,7 +20,7 @@ import { Actions } from "./Actions";
 import { Intro } from "./Intro";
 import { ChatGPTAvatar } from "./avatars";
 
-const PLUGIN_NAME = "@voxel51/voxelgpt";
+const PLUGIN_NAME = "atlas_plugin";
 
 const ChatPanel = () => {
   const executor = useOperatorExecutor(

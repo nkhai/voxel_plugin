@@ -906,28 +906,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@voxel51/voxelgpt@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@voxel51/voxelgpt@workspace:."
-  dependencies:
-    "@emotion/react": ^11.11.0
-    "@emotion/styled": ^11.11.0
-    "@mui/icons-material": ^5.11.16
-    "@mui/material": ^5.13.0
-    "@mui/styled-engine": ^5.12.3
-    "@rollup/plugin-node-resolve": ^15.0.2
-    "@vitejs/plugin-react": ^4.0.0
-    lodash: ^4.17.21
-    nodemon: ^2.0.19
-    react: ^18.2.0
-    react-is: ^18.2.0
-    react-markdown: ^8.0.7
-    styled-components: ^5.3.10
-    vite: ^3.2.4
-    vite-plugin-externals: ^0.6.2
-  languageName: unknown
-  linkType: soft
-
 "abbrev@npm:1, abbrev@npm:^1.0.0":
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
@@ -1016,6 +994,28 @@ __metadata:
   checksum: 52590c24860fa7173bedeb69a4c05fb573473e860197f618b9a28432ee4379049336727ae3a1f9c4cb083114601c1140cee578376164d0e651217a9843f9fe83
   languageName: node
   linkType: hard
+
+"atlas_plugin@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "atlas_plugin@workspace:."
+  dependencies:
+    "@emotion/react": ^11.11.0
+    "@emotion/styled": ^11.11.0
+    "@mui/icons-material": ^5.11.16
+    "@mui/material": ^5.13.0
+    "@mui/styled-engine": ^5.12.3
+    "@rollup/plugin-node-resolve": ^15.0.2
+    "@vitejs/plugin-react": ^4.0.0
+    lodash: ^4.17.21
+    nodemon: ^2.0.19
+    react: ^18.2.0
+    react-is: ^18.2.0
+    react-markdown: ^8.0.7
+    styled-components: ^5.3.10
+    vite: ^3.2.4
+    vite-plugin-externals: ^0.6.2
+  languageName: unknown
+  linkType: soft
 
 "babel-plugin-macros@npm:^3.1.0":
   version: 3.1.0

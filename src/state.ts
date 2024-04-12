@@ -1,7 +1,7 @@
 import { atom, atomFamily, selector } from "recoil";
 import { getBrowserStorageEffectForKey } from "@fiftyone/state";
 
-const PLUGIN_NAME = "@voxel51/voxelgpt";
+const PLUGIN_NAME = "atlas_plugin";
 
 export const atoms = {
   messages: atom({

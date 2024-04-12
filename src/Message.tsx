@@ -139,7 +139,7 @@ function Vote({queryId, hidden}) {
     let error = null;
     setIsLoading(true)
     try {
-      await executeOperator("@voxel51/voxelgpt/vote_for_query", {query_id: queryId, vote: direction})
+      await executeOperator("atlas_plugin/vote_for_query", {query_id: queryId, vote: direction})
       setVote({direction})
     } catch (e) {
       console.error(e)

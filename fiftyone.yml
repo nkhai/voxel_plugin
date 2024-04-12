@@ -1,4 +1,4 @@
-name: "@voxel51/voxelgpt"
+name: "atlas_plugin"
 description: VoxelGPT is an AI assistant that can query visual datasets, search the FiftyOne docs, and answer general computer vision questions
 version: 1.0.2
 fiftyone:

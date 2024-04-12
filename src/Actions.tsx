@@ -5,7 +5,7 @@ import Replay from '@mui/icons-material/Replay';
 import StopCircle from '@mui/icons-material/StopCircle';
 import {abortOperationsByURI} from "@fiftyone/operators"
 
-const ASK_VOXELGPT_URI = '@voxel51/voxelgpt/ask_voxelgpt_panel'
+const ASK_VOXELGPT_URI = 'atlas_plugin/ask_voxelgpt_panel'
 
 export function Actions() {
   const receiving = useRecoilValue(state.atoms.receiving);
