@@ -5,7 +5,8 @@ import { useRecoilValue } from "recoil";
 // import { Box } from '@mui/material/Box';
 // import { TextField } from '@mui/material/TextField';
 import { Box, Typography, TextField , InputAdornment} from "@mui/material";
-import { VerticalAlignBottom } from '@mui/icons-material/VerticalAlignBottom';
+// import { VerticalAlignBottom } from '@mui/icons-material/VerticalAlignBottom';
+import SubdirectoryArrowLeftIcon from '@mui/icons-material/SubdirectoryArrowLeft';
 export function Panel() {
   const dataset = useRecoilValue(fos.dataset);
   return (
@@ -36,7 +37,7 @@ export function Panel() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="end">
-              <VerticalAlignBottomIcon />
+              <SubdirectoryArrowLeftIcon />
             </InputAdornment>
           ),
         }}

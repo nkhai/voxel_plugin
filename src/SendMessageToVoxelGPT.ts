@@ -33,7 +33,7 @@ export class SendMessageToVoxelGPT extends Operator {
     const message = new GPTMessage(GPTMessageType.SUCCESS, [
       new types.Property(new types.String(), {
         default: ctx.params.message,
-        readOnly: true,
+        readOnly: false,
       }),
     ]);
     ctx.hooks.addMessage({

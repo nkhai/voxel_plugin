@@ -27,6 +27,7 @@ class AskVoxelGPT(foo.Operator):
             light_icon="/assets/icon-light.svg",
             dark_icon="/assets/icon-dark.svg",
             execute_as_generator=True,
+            # dynamic=True,
         )
 
     def resolve_input(self, ctx):
@@ -143,78 +144,79 @@ class AskVoxelGPTPanel(foo.Operator):
         )
 
     def execute(self, ctx):
-        query = ctx.params["query"]
-        history = ctx.params.get("history", [])
-        chat_history, sample_collection, orig_view = self._parse_history(
-            ctx, history
-        )
+        return ['khai','khai2','khai3']
+        # query = ctx.params["query"]
+        # history = ctx.params.get("history", [])
+        # chat_history, sample_collection, orig_view = self._parse_history(
+        #     ctx, history
+        # )
 
-        inject_voxelgpt_secrets(ctx)
+        # inject_voxelgpt_secrets(ctx)
 
-        try:
-            with add_sys_path(os.path.dirname(os.path.abspath(__file__))):
-                # pylint: disable=import-error,no-name-in-module
-                import db
-                from voxelgpt import ask_voxelgpt_generator
+        # try:
+        #     with add_sys_path(os.path.dirname(os.path.abspath(__file__))):
+        #         # pylint: disable=import-error,no-name-in-module
+        #         import db
+        #         from voxelgpt import ask_voxelgpt_generator
 
-                # Log user query
-                table = db.table(db.UserQueryTable)
-                ctx.params["query_id"] = table.insert_query(query)
+        #         # Log user query
+        #         table = db.table(db.UserQueryTable)
+        #         ctx.params["query_id"] = table.insert_query(query)
 
-                streaming_message = None
+        #         streaming_message = None
 
-                for response in ask_voxelgpt_generator(
-                    query,
-                    sample_collection=sample_collection,
-                    chat_history=chat_history,
-                    dialect="markdown",
-                    allow_streaming=True,
-                ):
-                    type = response["type"]
-                    data = response["data"]
+        #         for response in ask_voxelgpt_generator(
+        #             query,
+        #             sample_collection=sample_collection,
+        #             chat_history=chat_history,
+        #             dialect="markdown",
+        #             allow_streaming=True,
+        #         ):
+        #             type = response["type"]
+        #             data = response["data"]
 
-                    if type == "view":
-                        if orig_view is not None:
-                            message = (
-                                "I'm remembering your previous view. Any "
-                                "follow-up questions in this session will be "
-                                "posed with respect to it"
-                            )
-                            yield self.message(
-                                ctx, message, orig_view=orig_view
-                            )
+        #             if type == "view":
+        #                 if orig_view is not None:
+        #                     message = (
+        #                         "I'm remembering your previous view. Any "
+        #                         "follow-up questions in this session will be "
+        #                         "posed with respect to it"
+        #                     )
+        #                     yield self.message(
+        #                         ctx, message, orig_view=orig_view
+        #                     )
 
-                        yield self.view(ctx, data["view"])
-                    elif type == "message":
-                        kwargs = {}
+        #                 yield self.view(ctx, data["view"])
+        #             elif type == "message":
+        #                 kwargs = {}
 
-                        if data["overwrite"]:
-                            kwargs["overwrite_last"] = True
+        #                 if data["overwrite"]:
+        #                     kwargs["overwrite_last"] = True
 
-                        kwargs["history"] = data["history"]
-                        yield self.message(ctx, data["message"], **kwargs)
-                    elif type == "streaming":
-                        kwargs = {}
+        #                 kwargs["history"] = data["history"]
+        #                 yield self.message(ctx, data["message"], **kwargs)
+        #             elif type == "streaming":
+        #                 kwargs = {}
 
-                        if streaming_message is None:
-                            streaming_message = data["content"]
-                        else:
-                            streaming_message += data["content"]
-                            kwargs["overwrite_last"] = True
+        #                 if streaming_message is None:
+        #                     streaming_message = data["content"]
+        #                 else:
+        #                     streaming_message += data["content"]
+        #                     kwargs["overwrite_last"] = True
 
-                        if data["last"]:
-                            kwargs["history"] = streaming_message
+        #                 if data["last"]:
+        #                     kwargs["history"] = streaming_message
 
-                        yield self.message(ctx, streaming_message, **kwargs)
+        #                 yield self.message(ctx, streaming_message, **kwargs)
 
-                        if data["last"]:
-                            streaming_message = None
-                    elif type == "warning":
-                        yield self.warning(ctx, data["message"])
-        except Exception as e:
-            yield self.error(ctx, e)
-        finally:
-            yield self.done(ctx)
+        #                 if data["last"]:
+        #                     streaming_message = None
+        #             elif type == "warning":
+        #                 yield self.warning(ctx, data["message"])
+        # except Exception as e:
+        #     yield self.error(ctx, e)
+        # finally:
+        #     yield self.done(ctx)
 
     def view(self, ctx, view):
         if view != ctx.view:
@@ -302,7 +304,7 @@ class OpenVoxelGPTPanel(foo.Operator):
         return types.Placement(
             types.Places.SAMPLES_GRID_ACTIONS,
             types.Button(
-                label="Open VoxelGPT",
+                label="Open AtlasVoxel",
                 icon="/assets/icon-dark.svg",
                 prompt=False,
             ),

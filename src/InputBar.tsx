@@ -5,11 +5,11 @@ import {
   OutlinedInput,
   IconButton,
 } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+import SubdirectoryArrowLeftIcon from '@mui/icons-material/SubdirectoryArrowLeft';
 import { useRecoilState } from "recoil";
 import { atoms } from "./state";
 
-const InputBar = ({ hasMessages, disabled, onMessageSend, bottomRef }) => {
+const InputBar = ({ hasMessages, disabled, onMessageSend,placeHoldermsg, needIcon ,bottomRef }) => {
   const [waiting, setWaiting] = useRecoilState(atoms.waiting)
   const [message, setMessage] = useRecoilState(atoms.input)
   const inputRef = useRef(null)
@@ -38,6 +38,7 @@ const InputBar = ({ hasMessages, disabled, onMessageSend, bottomRef }) => {
 
   return (
     <div style={{ padding: "0.5rem" }}>
+      {needIcon === "true" ?
       <OutlinedInput
         ref={inputRef}
         autofocus
@@ -48,13 +49,27 @@ const InputBar = ({ hasMessages, disabled, onMessageSend, bottomRef }) => {
         variant="outlined"
         disabled={disabled}
         size="large"
-        placeholder='Send a message or type "help"'
+        placeholder={placeHoldermsg}
         endAdornment={
           <IconButton disabled={!showAdornment} onClick={sendMessage}>
-            <SendIcon style={{ opacity: showAdornment ? 1 : 0.2 }} />
-          </IconButton>
+            <SubdirectoryArrowLeftIcon style={{ opacity: showAdornment ? 1 : 1 }} />
+          </IconButton>}
+        
+      /> :
+      <OutlinedInput
+      ref={inputRef}
+      autofocus
+      fullWidth
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      onKeyPress={handleKeyPress}
+      variant="outlined"
+      disabled={disabled}
+      size="large"
+      placeholder={placeHoldermsg}
+      
+    />
         }
-      />
       <div ref={bottomRef} />
     </div>
   );
