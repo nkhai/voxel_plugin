@@ -133,14 +133,64 @@ class AskVoxelGPT(foo.Operator):
         )
 
 
+class CountSamples(foo.Operator):
+    @property
+    def config(self):
+        return foo.OperatorConfig(
+            name="count_samples",
+            label="Count samples",
+            dynamic=True,
+        )
+
+    def resolve_input(self, ctx):
+        inputs = types.Object()
+
+        if ctx.view != ctx.dataset.view():
+            choices = types.RadioGroup()
+            choices.add_choice(
+                "DATASET",
+                label="Dataset",
+                description="Count the number of samples in the dataset",
+            )
+
+            choices.add_choice(
+                "VIEW",
+                label="Current view",
+                description="Count the number of samples in the current view",
+            )
+
+            inputs.enum(
+                "target",
+                choices.values(),
+                required=True,
+                default="VIEW",
+                view=choices,
+            )
+
+        return types.Property(inputs, view=types.View(label="Count samples"))
+
+    def execute(self, ctx):
+        target = ctx.params.get("target", "DATASET")
+        sample_collection = ctx.view if target == "VIEW" else ctx.dataset
+        return {"count": 50}
+
+    def resolve_output(self, ctx):
+        target = ctx.params.get("target", "DATASET")
+        outputs = types.Object()
+        outputs.int(
+            "count",
+            label=f"Number of samples in the current {target.lower()}",
+        )
+        return types.Property(outputs)
+    
 class AskVoxelGPTPanel(foo.Operator):
     @property
     def config(self):
         return foo.OperatorConfig(
             name="ask_voxelgpt_panel",
             label="Ask VoxelGPT Panel",
-            execute_as_generator=True,
-            unlisted=True,
+            # execute_as_generator=True,
+            dynamic=True,
         )
 
     def execute(self, ctx):
@@ -218,77 +268,45 @@ class AskVoxelGPTPanel(foo.Operator):
         # finally:
         #     yield self.done(ctx)
 
-    def view(self, ctx, view):
-        if view != ctx.view:
-            return ctx.trigger(
-                "set_view",
-                params=dict(view=serialize_view(view)),
+    def resolve_input(self, ctx):
+        inputs = types.Object()
+
+        if ctx.view != ctx.dataset.view():
+            choices = types.RadioGroup()
+            choices.add_choice(
+                "DATASET",
+                label="Dataset",
+                description="Count the number of samples in the dataset",
             )
 
-    def message(self, ctx, message, **kwargs):
-        return self.show_message(ctx, message, types.MarkdownView(), **kwargs)
+            choices.add_choice(
+                "VIEW",
+                label="Current view",
+                description="Count the number of samples in the current view",
+            )
 
-    def warning(self, ctx, message):
-        view = types.Warning(label=message)
-        return self.show_message(ctx, message, view)
+            inputs.enum(
+                "target",
+                choices.values(),
+                required=True,
+                default="VIEW",
+                view=choices,
+            )
 
-    def error(self, ctx, exception):
-        message = str(exception)
-        trace = traceback.format_exc()
-        view = types.Error(label=message, description=trace)
-        return self.show_message(ctx, message, view)
+        return types.Property(inputs, view=types.View(label="Count samples"))
 
-    def done(self, ctx):
-        return ctx.trigger(
-            f"{self.plugin_name}/show_message",
-            params=dict(done=True),
-        )
+    def execute(self, ctx):
+        target = ctx.params.get("target", "DATASET")
+        sample_collection = ctx.view if target == "VIEW" else ctx.dataset
+        return {"count": sample_collection.count()}
 
-    def show_message(self, ctx, message, view_type, **kwargs):
+    def resolve_output(self, ctx):
+        target = ctx.params.get("target", "DATASET")
         outputs = types.Object()
-        outputs.str("message", view=view_type)
-        return ctx.trigger(
-            f"{self.plugin_name}/show_message",
-            params=dict(
-                query_id=ctx.params.get("query_id"),
-                outputs=types.Property(outputs).to_json(),
-                data=dict(message=message, **kwargs),
-            ),
+        outputs.int(
+            "count",
+            label=f"Number of samples in the current {target.lower()}",
         )
-
-    def _parse_history(self, ctx, history):
-        if history is None:
-            history = []
-
-        # Parse chat history
-        chat_history = []
-        orig_view = None
-        for item in history:
-            if item["type"] == "outgoing":
-                history = item.get("content", None)
-            else:
-                history = item.get("data", {}).get("history", None)
-                _orig_view = item.get("data", {}).get("orig_view", None)
-                if _orig_view is not None:
-                    orig_view = _orig_view
-
-            if history:
-                chat_history.append(history)
-
-        # If we have an `orig_view` into the same dataset, start from it
-        if orig_view is not None and orig_view["dataset"] == ctx.dataset.name:
-            try:
-                view = deserialize_view(ctx.dataset, orig_view["stages"])
-                return chat_history, view, None
-            except:
-                pass
-
-        orig_view = dict(
-            dataset=ctx.dataset.name,
-            stages=serialize_view(ctx.view),
-        )
-
-        return chat_history, ctx.view, orig_view
 
 
 class OpenVoxelGPTPanel(foo.Operator):
@@ -418,3 +436,4 @@ def register(p):
     p.register(OpenVoxelGPTPanel)
     p.register(OpenVoxelGPTPanelOnStartup)
     p.register(VoteForQuery)
+    p.register(CountSamples)

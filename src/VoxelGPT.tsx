@@ -41,9 +41,17 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 }));
 const PLUGIN_NAME = "atlas_plugin";
 
-const ChatPanel = () => {
+
+function resolveResult(executor:any) {
+  return new Promise((resolve) => {
+    const data = executor.execute();
+    resolve(data);
+  });
+}
+
+const ChatPanel = async () => {
   const executor = useOperatorExecutor(
-    `${PLUGIN_NAME}/send_message_to_voxelgpt`
+    "atlas_plugin/count_samples"
   );
   const messages = useRecoilValue(state.atoms.messages);
 
@@ -54,8 +62,17 @@ const ChatPanel = () => {
   const handleMessageSend = (message) => {
     executor.execute({ message });
   };
-  const data = executor.execute({ 'key':'' }).result;
-console.log("some data: " + JSON.stringify(data));
+  console.log("access function")
+  let data = [];
+  resolveResult(executor).then((objs:any) => {
+    data = objs.result
+    console.log("data: " + JSON.stringify(data));
+  });
+  console.log("pass function")
+  // if (executor.isLoading) return <h3>Loading...</h3>;
+//   if (executor.result) return <h3>Dataset size: {executor.result}</h3>;
+
+// console.log("some data: " + JSON.stringify(data));
   const receiving = useRecoilValue(state.atoms.receiving);
   const waiting = useRecoilValue(state.atoms.waiting);
   const hasMessages = false;
@@ -125,7 +142,7 @@ console.log("some data: " + JSON.stringify(data));
         <Grid item sm={8} md={8} lg={8}>
           <DemoPaper elevation={3} variant="outlined" >
             <div style={{textAlign:"left"}}>X class Deine:</div>
-            {JSON.stringify(data)}
+            {/* {JSON.stringify(data)} */}
           </DemoPaper>
           {/* <Typography
             variant="caption"
